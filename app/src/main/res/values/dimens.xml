@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bird_x">50dp</dimen>
+    <dimen name="bird_y">300dp</dimen>
+    <dimen name="bird_height">40dp</dimen>
+    <dimen name="bird_width">66dp</dimen>
+    <dimen name="gravity">1.5dp</dimen>
+    <dimen name="flappy_boost">-18dp</dimen>
+    <dimen name="bkg_top_height">150dp</dimen>
+    <dimen name="bkg_bottom_height">200dp</dimen>
+    <dimen name="obstacle_width">100dp</dimen>
+    <dimen name="obstacle_separation">275dp</dimen>
+    <dimen name="obstacle_speed">5dp</dimen>
+    <dimen name="head_height">30dp</dimen>
+    <dimen name="head_extra_width">20dp</dimen>
+    <dimen name="obstale_min_position">100dp</dimen>
+
+</resources>
