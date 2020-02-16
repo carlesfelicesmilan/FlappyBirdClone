@@ -14,5 +14,6 @@
     <dimen name="head_height">30dp</dimen>
     <dimen name="head_extra_width">20dp</dimen>
     <dimen name="obstale_min_position">100dp</dimen>
+    <dimen name="obstacle_interval">350dp</dimen>
 
 </resources>

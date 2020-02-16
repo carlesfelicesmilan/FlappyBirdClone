@@ -4,7 +4,10 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
+import com.example.flappybirdclone.GameManager;
+import com.example.flappybirdclone.GameManagerCallback;
 import com.example.flappybirdclone.R;
 
 public class Bird implements Sprite {
@@ -15,10 +18,15 @@ public class Bird implements Sprite {
     private float gravity;
     private float currentFallingSpeed;
     private float flappyBoost;
+    private boolean collision = false;
+    private int screenHeight;
+    private GameManagerCallback callback;
 
     // Setup the initial position of the bird (birdX) based on dimens.xml
     // We load our image and scale it to our desired dimensions based on the device size (birdWith and birdHeight)
-    public Bird(Resources resources) {
+    public Bird(Resources resources, int screenHeight, GameManager callback) {
+        this.screenHeight = screenHeight;
+        this.callback = callback;
         birdX = (int) resources.getDimension(R.dimen.bird_x);
         birdWidth = (int) resources.getDimension(R.dimen.bird_width);
         birdHeight = (int) resources.getDimension(R.dimen.bird_height);
@@ -46,13 +54,29 @@ public class Bird implements Sprite {
     @Override
     // Update the Y position with the falling speed
     // Update the current forward speed with the gravity
+    // We check if there is a collision or if we touch the bottom of the screen, if there is not we update the position of the bird
     public void update() {
-        birdY += currentFallingSpeed;
-        currentFallingSpeed += gravity;
+        if (collision) {
+            if(birdY + bird_down.getHeight() < screenHeight) {
+                birdY += currentFallingSpeed;
+                currentFallingSpeed += gravity;
+            }
+        } else {
+            birdY += currentFallingSpeed;
+            currentFallingSpeed += gravity;
+            Rect birdPosition = new Rect(birdX, birdY, birdX + birdWidth, birdY + birdHeight);
+            callback.updatePosition(birdPosition);
+        }
     }
 
     // When we touch the screen we add the flappyBoost to our Falling speed
     public void onTouchEvent() {
-        currentFallingSpeed = flappyBoost;
+        if (!collision) {
+            currentFallingSpeed = flappyBoost;
+        }
+    }
+
+    public void collision() {
+        collision = true;
     }
 }

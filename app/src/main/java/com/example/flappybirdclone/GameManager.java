@@ -3,6 +3,7 @@ package com.example.flappybirdclone;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -12,15 +13,25 @@ import android.view.SurfaceView;
 import com.example.flappybirdclone.sprites.Background;
 import com.example.flappybirdclone.sprites.Bird;
 import com.example.flappybirdclone.sprites.Obstacle;
+import com.example.flappybirdclone.sprites.ObstacleManager;
 
-public class GameManager extends SurfaceView implements SurfaceHolder.Callback {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class GameManager extends SurfaceView implements SurfaceHolder.Callback, GameManagerCallback {
 
     public MainThread thread;
+    private GameState gameState = GameState.PLAYING;
 
     private Bird bird;
     private Background background;
     // Used to get the screen size dimensions
     private DisplayMetrics dm;
+    private ObstacleManager obstacleManager;
+    private Rect birdPosition;
+    // Map of obstacle and each obstacle have two rectangles
+    private HashMap<Obstacle, List<Rect>> obstaclePositions = new HashMap<>();
 
     public GameManager(Context context, AttributeSet attributeSet) {
         super(context);
@@ -37,8 +48,9 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback {
 
     //Initiate the game and create the bird
     private void initGame() {
-        bird = new Bird(getResources());
+        bird = new Bird(getResources(), dm.heightPixels, this);
         background = new Background(getResources(), dm.heightPixels);
+        obstacleManager = new ObstacleManager(getResources(), dm.heightPixels, dm.widthPixels, this);
     }
 
     //Start the thread
@@ -73,21 +85,99 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update(){
-        bird.update();
+        switch (gameState) {
+            case PLAYING:
+                bird.update();
+                obstacleManager.update();
+                break;
+            case GAME_OVER:
+                // We update the bird because it needs to fall but not the obstacles
+                bird.update();
+                break;
+        }
     }
 
     //Draw the bird inside the canvas
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        canvas.drawRGB(150,255,255);
-        background.draw(canvas);
-        bird.draw(canvas);
+        if (canvas != null) {
+            canvas.drawRGB(150,255,255);
+            background.draw(canvas);
+            // REFACTOR
+            switch (gameState) {
+                case PLAYING:
+                    bird.draw(canvas);
+                    obstacleManager.draw(canvas);
+                    calculateCollision();
+                    break;
+                case GAME_OVER:
+                    bird.draw(canvas);
+                    obstacleManager.draw(canvas);
+                    break;
+            }
+        }
+
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        switch (gameState) {
+            case PLAYING:
+                bird.onTouchEvent();
+                break;
+            case GAME_OVER:
+                break;
+        }
+
+        // REMOVE
         bird.onTouchEvent();
         return super.onTouchEvent(event);
     }
+
+    @Override
+    public void updatePosition(Rect birdPosition) {
+        this.birdPosition = birdPosition;
+    }
+
+    @Override
+    public void updatePosition(Obstacle obstacle, ArrayList<Rect> positions) {
+        if(obstaclePositions.containsKey(obstacle)) {
+            obstaclePositions.remove(obstacle);
+        }
+        obstaclePositions.put(obstacle, positions);
+    }
+
+    @Override
+    public void removeObstacle(Obstacle obstacle) {
+        obstaclePositions.remove(obstacle);
+    }
+
+    // Calculate if a collision has occurred
+    // First we check if the bird is at the bottom of the screen
+    // If not, we check for each obstacle and, for each one, we have two rectangles
+    public void calculateCollision() {
+        boolean collision = false;
+        if (birdPosition.bottom > dm.heightPixels) {
+            collision = true;
+        } else {
+            for (Obstacle obstacle : obstaclePositions.keySet()) {
+                Rect bottomRectangle = obstaclePositions.get(obstacle).get(0);
+                Rect topRectangle = obstaclePositions.get(obstacle).get(1);
+                if (birdPosition.right > bottomRectangle.left && birdPosition.left < bottomRectangle.right && birdPosition.bottom > bottomRectangle.top) {
+                    collision = true;
+                } else if (birdPosition.right > topRectangle.left && birdPosition.left < topRectangle.right && birdPosition.top < topRectangle.bottom) {
+                    collision = true;
+                }
+            }
+        }
+
+        if (collision) {
+            // Implement game over
+            gameState = GameState.GAME_OVER;
+            bird.collision();
+        }
+    }
+
+
 }
