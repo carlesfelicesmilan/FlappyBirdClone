@@ -12,8 +12,11 @@ import android.view.SurfaceView;
 
 import com.example.flappybirdclone.sprites.Background;
 import com.example.flappybirdclone.sprites.Bird;
+import com.example.flappybirdclone.sprites.GameMessage;
+import com.example.flappybirdclone.sprites.GameOver;
 import com.example.flappybirdclone.sprites.Obstacle;
 import com.example.flappybirdclone.sprites.ObstacleManager;
+import com.example.flappybirdclone.sprites.Score;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,14 +24,20 @@ import java.util.List;
 
 public class GameManager extends SurfaceView implements SurfaceHolder.Callback, GameManagerCallback {
 
+    private static final String APP_NAME = "Flappy bird clone";
     public MainThread thread;
-    private GameState gameState = GameState.PLAYING;
+    private GameState gameState = GameState.INITIAL;
 
     private Bird bird;
     private Background background;
     // Used to get the screen size dimensions
     private DisplayMetrics dm;
     private ObstacleManager obstacleManager;
+    private GameOver gameOver;
+    private GameMessage gameMessage;
+    private Score scoreSprite;
+    // Actual score
+    private int score;
     private Rect birdPosition;
     // Map of obstacle and each obstacle have two rectangles
     private HashMap<Obstacle, List<Rect>> obstaclePositions = new HashMap<>();
@@ -39,18 +48,25 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
         thread = new MainThread(getHolder(), this);
 
         dm = new DisplayMetrics();
-        // This context comes from main activity. Main activity initiates the view and  the view opens the game manager
+        // This context comes from main activity. Main activity initiates the view and the view opens the game manager
         // We need to convert the context into an Activity so we can get the window manager
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         initGame();
     }
 
-    //Initiate the game and create the bird
+    // Initiate the game and create the bird
+    // We need to restart bird position and obstacle position everytime that we start a new game
     private void initGame() {
+        score = 0;
+        birdPosition = new Rect();
+        obstaclePositions = new HashMap<>();
         bird = new Bird(getResources(), dm.heightPixels, this);
         background = new Background(getResources(), dm.heightPixels);
         obstacleManager = new ObstacleManager(getResources(), dm.heightPixels, dm.widthPixels, this);
+        gameOver = new GameOver(getResources(), dm.heightPixels, dm.widthPixels);
+        gameMessage = new GameMessage(getResources(), dm.heightPixels, dm.widthPixels);
+        scoreSprite = new Score(getResources(), dm.heightPixels, dm.widthPixels);
     }
 
     //Start the thread
@@ -106,27 +122,41 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
             background.draw(canvas);
             // REFACTOR
             switch (gameState) {
+                case INITIAL:
+                    bird.draw(canvas);
+                    gameMessage.draw(canvas);
+                    break;
                 case PLAYING:
                     bird.draw(canvas);
                     obstacleManager.draw(canvas);
+                    scoreSprite.draw(canvas);
                     calculateCollision();
                     break;
                 case GAME_OVER:
                     bird.draw(canvas);
                     obstacleManager.draw(canvas);
+                    gameOver.draw(canvas);
+                    scoreSprite.draw(canvas);
                     break;
             }
         }
 
     }
 
+    // In initial event we want the bird start flying when user clicks on the screen so we call onTouchEvent
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (gameState) {
+            case INITIAL:
+                bird.onTouchEvent();
+                gameState = GameState.PLAYING;
+                break;
             case PLAYING:
                 bird.onTouchEvent();
                 break;
             case GAME_OVER:
+                initGame();
+                gameState = GameState.INITIAL;
                 break;
         }
 
@@ -148,9 +178,12 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
         obstaclePositions.put(obstacle, positions);
     }
 
+    // When we remove an obstacle of the screen it means that the bird has passed so we increase the score
     @Override
     public void removeObstacle(Obstacle obstacle) {
         obstaclePositions.remove(obstacle);
+        score++;
+        scoreSprite.updateScore(score);
     }
 
     // Calculate if a collision has occurred
@@ -176,6 +209,7 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
             // Implement game over
             gameState = GameState.GAME_OVER;
             bird.collision();
+            scoreSprite.collision(getContext().getSharedPreferences(APP_NAME, Context.MODE_PRIVATE));
         }
     }
 
