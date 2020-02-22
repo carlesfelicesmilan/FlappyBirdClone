@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">FlappyBirdClone</string>
+    <string name="app_name">Game</string>
+    <string name="btn">Button</string>
+    <string name="message">Hello Geeks! This is a Button.</string>
+
 </resources>

@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 
 import com.example.game.sprites.Background;
 import com.example.game.sprites.Bird;
+import com.example.game.sprites.Button;
 import com.example.game.sprites.GameMessage;
 import com.example.game.sprites.GameOver;
 import com.example.game.sprites.Obstacle;
@@ -23,9 +24,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 public class GameManager extends SurfaceView implements SurfaceHolder.Callback, GameManagerCallback {
 
-    private static final String APP_NAME = "Flappy bird clone";
+    private static final String APP_NAME = "Rpg Game";
     public MainThread thread;
     private GameState gameState = GameState.INITIAL;
 
@@ -50,6 +52,8 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
     private MediaPlayer mpDie;
     private MediaPlayer mpHit;
     private MediaPlayer mpWing;
+
+    private Button button;
 
     public GameManager(Context context, AttributeSet attributeSet) {
         super(context);
@@ -77,6 +81,7 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
         gameOver = new GameOver(getResources(), dm.heightPixels, dm.widthPixels);
         gameMessage = new GameMessage(getResources(), dm.heightPixels, dm.widthPixels);
         scoreSprite = new Score(getResources(), dm.heightPixels, dm.widthPixels);
+        button = new Button(getResources(), dm.heightPixels, dm.widthPixels);
     }
 
     private void initSounds() {
@@ -143,6 +148,7 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
                 case INITIAL:
                     bird.draw(canvas);
                     gameMessage.draw(canvas);
+                    button.draw(canvas);
                     break;
                 case PLAYING:
                     bird.draw(canvas);
@@ -170,6 +176,9 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
                 mpWing.start();
                 gameState = GameState.PLAYING;
                 mpSwoosh.start();
+                break;
+            case OPTIONS:
+                button.optionsClicked();
                 break;
             case PLAYING:
                 bird.onTouchEvent();
