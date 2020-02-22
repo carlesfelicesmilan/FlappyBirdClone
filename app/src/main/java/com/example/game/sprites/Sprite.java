@@ -1,4 +1,4 @@
-package com.example.flappybirdclone.sprites;
+package com.example.game.sprites;
 
 import android.graphics.Canvas;
 

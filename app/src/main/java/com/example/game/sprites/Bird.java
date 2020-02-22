@@ -1,4 +1,4 @@
-package com.example.flappybirdclone.sprites;
+package com.example.game.sprites;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -6,9 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-import com.example.flappybirdclone.GameManager;
-import com.example.flappybirdclone.GameManagerCallback;
-import com.example.flappybirdclone.R;
+import com.example.game.GameManager;
+import com.example.game.GameManagerCallback;
+import com.example.game.R;
 
 public class Bird implements Sprite {
 

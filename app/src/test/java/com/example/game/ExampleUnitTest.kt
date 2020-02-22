@@ -1,4 +1,4 @@
-package com.example.flappybirdclone
+package com.example.game
 
 import org.junit.Test
 

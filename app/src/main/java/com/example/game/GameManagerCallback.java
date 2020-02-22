@@ -1,8 +1,8 @@
-package com.example.flappybirdclone;
+package com.example.game;
 
 import android.graphics.Rect;
 
-import com.example.flappybirdclone.sprites.Obstacle;
+import com.example.game.sprites.Obstacle;
 
 import java.util.ArrayList;
 

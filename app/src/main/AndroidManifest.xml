@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flappybirdclone">
+    package="com.example.game">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:screenOrientation="portrait"
         android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.game.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

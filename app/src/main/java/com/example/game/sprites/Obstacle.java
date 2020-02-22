@@ -1,4 +1,4 @@
-package com.example.flappybirdclone.sprites;
+package com.example.game.sprites;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-import com.example.flappybirdclone.R;
+import com.example.game.R;
 
 import java.util.ArrayList;
 import java.util.Random;

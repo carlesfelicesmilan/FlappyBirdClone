@@ -1,11 +1,11 @@
-package com.example.flappybirdclone.sprites;
+package com.example.game.sprites;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-import com.example.flappybirdclone.R;
+import com.example.game.R;
 
 public class Background implements Sprite {
 

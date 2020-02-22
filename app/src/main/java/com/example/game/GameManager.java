@@ -1,4 +1,4 @@
-package com.example.flappybirdclone;
+package com.example.game;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,13 +11,13 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.flappybirdclone.sprites.Background;
-import com.example.flappybirdclone.sprites.Bird;
-import com.example.flappybirdclone.sprites.GameMessage;
-import com.example.flappybirdclone.sprites.GameOver;
-import com.example.flappybirdclone.sprites.Obstacle;
-import com.example.flappybirdclone.sprites.ObstacleManager;
-import com.example.flappybirdclone.sprites.Score;
+import com.example.game.sprites.Background;
+import com.example.game.sprites.Bird;
+import com.example.game.sprites.GameMessage;
+import com.example.game.sprites.GameOver;
+import com.example.game.sprites.Obstacle;
+import com.example.game.sprites.ObstacleManager;
+import com.example.game.sprites.Score;
 
 import java.util.ArrayList;
 import java.util.HashMap;

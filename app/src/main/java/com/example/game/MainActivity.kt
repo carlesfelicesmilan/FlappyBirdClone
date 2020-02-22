@@ -1,7 +1,6 @@
-package com.example.flappybirdclone
+package com.example.game
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
 
