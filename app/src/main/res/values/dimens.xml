@@ -15,9 +15,9 @@
     <dimen name="head_extra_width">20dp</dimen>
     <dimen name="obstale_min_position">100dp</dimen>
     <dimen name="obstacle_interval">350dp</dimen>
-    <dimen name="button_x">100dp</dimen>
-    <dimen name="button_y">100dp</dimen>
-    <dimen name="button_width">100dp</dimen>
-    <dimen name="button_height">100dp</dimen>
+    <dimen name="button_x">160dp</dimen>
+    <dimen name="button_y">40dp</dimen>
+    <dimen name="button_width">80dp</dimen>
+    <dimen name="button_height">80dp</dimen>
 
 </resources>

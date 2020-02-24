@@ -2,6 +2,7 @@ package com.example.game;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
@@ -10,10 +11,11 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 
 import com.example.game.sprites.Background;
 import com.example.game.sprites.Bird;
-import com.example.game.sprites.Button;
+import com.example.game.sprites.OptionsButton;
 import com.example.game.sprites.GameMessage;
 import com.example.game.sprites.GameOver;
 import com.example.game.sprites.Obstacle;
@@ -53,7 +55,7 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
     private MediaPlayer mpHit;
     private MediaPlayer mpWing;
 
-    private Button button;
+    private OptionsButton button;
 
     public GameManager(Context context, AttributeSet attributeSet) {
         super(context);
@@ -81,7 +83,7 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
         gameOver = new GameOver(getResources(), dm.heightPixels, dm.widthPixels);
         gameMessage = new GameMessage(getResources(), dm.heightPixels, dm.widthPixels);
         scoreSprite = new Score(getResources(), dm.heightPixels, dm.widthPixels);
-        button = new Button(getResources(), dm.heightPixels, dm.widthPixels);
+        button = new OptionsButton(getResources(), dm.heightPixels, dm.widthPixels);
     }
 
     private void initSounds() {
@@ -150,6 +152,9 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
                     gameMessage.draw(canvas);
                     button.draw(canvas);
                     break;
+                case OPTIONS:
+                    button.draw(canvas);
+                    break;
                 case PLAYING:
                     bird.draw(canvas);
                     obstacleManager.draw(canvas);
@@ -170,15 +175,27 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
     // In initial event we want the bird start flying when user clicks on the screen so we call onTouchEvent
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        final int action = event.getAction();
+        final int evX = (int) event.getX();
+        final int evY = (int) event.getY();
+
         switch (gameState) {
             case INITIAL:
-                bird.onTouchEvent();
-                mpWing.start();
-                gameState = GameState.PLAYING;
-                mpSwoosh.start();
+                if (button.isButtonClicked(evX, evY)) {
+                    gameState = GameState.OPTIONS;
+                }
+                else {
+                    bird.onTouchEvent();
+                    mpWing.start();
+                    gameState = GameState.PLAYING;
+                    mpSwoosh.start();
+                }
                 break;
             case OPTIONS:
-                button.optionsClicked();
+                if (button.isButtonClicked(evX, evY)) {
+                    gameState = GameState.INITIAL;
+                }
                 break;
             case PLAYING:
                 bird.onTouchEvent();

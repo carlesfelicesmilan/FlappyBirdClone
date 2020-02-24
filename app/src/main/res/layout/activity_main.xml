@@ -7,8 +7,12 @@
     tools:context=".MainActivity">
 
     // Display our game Manager
+
     <com.example.game.GameManager
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="16dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
