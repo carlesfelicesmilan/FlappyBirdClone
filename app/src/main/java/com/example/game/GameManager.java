@@ -54,6 +54,8 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
     private MediaPlayer mpDie;
     private MediaPlayer mpHit;
     private MediaPlayer mpWing;
+    private MediaPlayer mpOptionOn;
+    private MediaPlayer mpOptionOff;
 
     private OptionsButton button;
 
@@ -92,6 +94,8 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
         mpDie = MediaPlayer.create(getContext(), R.raw.die);
         mpHit = MediaPlayer.create(getContext(), R.raw.hit);
         mpWing = MediaPlayer.create(getContext(), R.raw.wing);
+        mpOptionOn = MediaPlayer.create(getContext(), R.raw.options);
+        mpOptionOff = MediaPlayer.create(getContext(), R.raw.options);
     }
 
     //Start the thread
@@ -184,6 +188,7 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
             case INITIAL:
                 if (button.isButtonClicked(evX, evY)) {
                     gameState = GameState.OPTIONS;
+                    mpOptionOn.start();
                 }
                 else {
                     bird.onTouchEvent();
@@ -195,6 +200,7 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
             case OPTIONS:
                 if (button.isButtonClicked(evX, evY)) {
                     gameState = GameState.INITIAL;
+                    mpOptionOff.start();
                 }
                 break;
             case PLAYING:

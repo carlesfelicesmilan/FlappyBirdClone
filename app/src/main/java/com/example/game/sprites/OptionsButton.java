@@ -23,15 +23,15 @@ public class OptionsButton implements Sprite{
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
 
-        buttonX = (int) resources.getDimension(R.dimen.button_x);
-        buttonY = (int) resources.getDimension(R.dimen.button_y);
         buttonWidth = (int) resources.getDimension(R.dimen.button_width);
         buttonHeight = (int) resources.getDimension(R.dimen.button_height);
+        buttonY = (int) resources.getDimension(R.dimen.button_y);
+        buttonX = screenWidth / 2 - buttonWidth / 2;
 
-        Bitmap buttonOptionsOn = BitmapFactory.decodeResource(resources, R.drawable.options);
+        Bitmap buttonOptionsOn = BitmapFactory.decodeResource(resources, R.drawable.bird_down);
         optionsButtonOn = Bitmap.createScaledBitmap(buttonOptionsOn, buttonWidth, buttonHeight, false);
 
-        Bitmap buttonOptionsOff = BitmapFactory.decodeResource(resources, R.drawable.back);
+        Bitmap buttonOptionsOff = BitmapFactory.decodeResource(resources, R.drawable.bird_up);
         optionsButtonOff = Bitmap.createScaledBitmap(buttonOptionsOff, buttonWidth, buttonHeight, false);
 
         optionsClicked = false;
